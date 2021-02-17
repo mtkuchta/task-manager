@@ -6,6 +6,7 @@ export const GlobalStyle = createGlobalStyle`
 
 html{
     box-sizing:border-box;
+    color:${({ theme }) => theme.colors.BLACK}
 }
 
 *,*::after, *::before{

@@ -7,7 +7,7 @@ const StyledHeader = styled.header`
   align-items: center;
 
   h1 {
-    font-size: 50px;
+    font-size: 4em;
     font-weight: normal;
     color: ${({ theme }) => theme.colors.BLACK};
     padding-left: 10%;

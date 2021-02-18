@@ -14,13 +14,13 @@ const Container = styled.div`
     'not_important not_important-urgent not_important-not_urgent';
 `;
 
-const TaskBoard = () => {
+const TaskBoard = ({ tasks }) => {
   return (
     <Container>
-      <Card area="important-urgent" />
-      <Card area="important-not_urgent" />
-      <Card area="not_important-urgent" />
-      <Card area="not_important-not_urgent" />
+      <Card area="important-urgent" important urgent tasks={tasks} />
+      <Card area="important-not_urgent" important urgent={false} tasks={tasks} />
+      <Card area="not_important-urgent" important={false} urgent tasks={tasks} />
+      <Card area="not_important-not_urgent" important={false} urgent={false} tasks={tasks} />
       <CardDescription area="urgent" text="Urgent" red />
       <CardDescription area="not_urgent" text="Not urgent" />
       <CardDescription area="important" text="Important" red rotated />

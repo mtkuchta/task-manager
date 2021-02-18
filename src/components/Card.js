@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Task from './Task';
 
 const Container = styled.div`
   height: 100%;
@@ -13,15 +14,24 @@ const Container = styled.div`
     height: 94%;
     background-color: ${({ theme }) => theme.colors.YELLOW};
     filter: drop-shadow(-8px 8px 4px rgba(0, 0, 0, 0.55));
+    transform: translateZ(0);
     transform: rotate(${({ rot }) => `${rot}deg`});
+    transition: 0.5s;
+    padding: 4%;
   }
 `;
 
-const Card = (props) => {
+const Card = ({ area, important, urgent, tasks }) => {
   const rot = Math.random().toFixed(2);
+  const taskList = tasks.map((task) => {
+    if (important === task.isImportant && urgent === task.isUrgent) {
+      return <Task key={task.description} description={task.description} rot={rot} />;
+    }
+  });
+
   return (
-    <Container area={props.area} rot={rot}>
-      <div className="card"></div>
+    <Container area={area} rot={rot}>
+      <ul className="card">{taskList}</ul>
     </Container>
   );
 };

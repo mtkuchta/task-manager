@@ -24,9 +24,9 @@ const StyledLabel = styled.label`
   .checkmark {
     position: absolute;
     top: 20%;
-    left: 0;
-    height: 20px;
-    width: 20px;
+    left: 0%;
+    height: 21px;
+    width: 21px;
     border-radius: 4px;
     border: 2px solid #333;
     transition: 0.3s;
@@ -38,7 +38,7 @@ const StyledLabel = styled.label`
   }
 
   input:checked ~ .checkmark {
-    border: none;
+    /* border: none; */
   }
 
   .checkmark:after {
@@ -56,7 +56,7 @@ const StyledLabel = styled.label`
     top: 0px;
     width: 9px;
     height: 14px;
-    border: solid ${({ theme }) => theme.colors.GREEN};
+    border: solid ${({ theme, red }) => (red ? theme.colors.RED : theme.colors.GREEN)};
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -64,10 +64,10 @@ const StyledLabel = styled.label`
   }
 `;
 
-const Checkbox = () => {
+const Checkbox = ({ handleCheckbox, red, value, id }) => {
   return (
-    <StyledLabel>
-      <input type="checkbox" />
+    <StyledLabel red={red ? true : false} id={id}>
+      <input type="checkbox" onChange={handleCheckbox} checked={value ? true : false} />
       <span className="checkmark"></span>1
     </StyledLabel>
   );

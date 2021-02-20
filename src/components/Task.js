@@ -20,6 +20,7 @@ const Container = styled.li`
     font-family: 'Architects Daughter';
     font-size: 2.1em;
     width: 80%;
+    text-decoration: ${({ isDone }) => (isDone ? 'line-through' : 'none')};
   }
 
   button {
@@ -50,12 +51,16 @@ const Container = styled.li`
   }
 `;
 
-const Task = (props) => {
+const Task = ({ id, description, rot, isDoneHandler, deleteTaskHandler, isDone }) => {
+  const dragStart = (e) => {
+    const target = e.target;
+    e.dataTransfer.setData('id', e.target.firstChild.id);
+  };
   return (
-    <Container>
-      <Checkbox />
-      <p className="description">{props.description}</p>
-      <button className="delete">
+    <Container isDone={isDone} draggable={true} onDragStart={dragStart}>
+      <Checkbox handleCheckbox={isDoneHandler} value={isDone} id={id} />
+      <p className="description">{description}</p>
+      <button className="delete" onClick={deleteTaskHandler} data-index={id}>
         <img src={deleteIcon}></img>
       </button>
     </Container>

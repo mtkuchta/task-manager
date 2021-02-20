@@ -21,11 +21,21 @@ const Container = styled.div`
   }
 `;
 
-const Card = ({ area, important, urgent, tasks }) => {
+const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler }) => {
   const rot = Math.random().toFixed(2);
   const taskList = tasks.map((task) => {
     if (important === task.isImportant && urgent === task.isUrgent) {
-      return <Task key={task.description} description={task.description} rot={rot} />;
+      return (
+        <Task
+          key={task.id}
+          id={task.id}
+          description={task.description}
+          rot={rot}
+          isDoneHandler={isDoneHandler}
+          deleteTaskHandler={deleteTaskHandler}
+          isDone={task.isDone}
+        />
+      );
     }
   });
 

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import Card from './Card';
 import CardDescription from './CardDecription';
 
+import { cardsDescriptionData } from '../assets/cardsDescriptionData';
+
 const Container = styled.div`
   width: 95vh;
   height: 95vh;
@@ -14,17 +16,44 @@ const Container = styled.div`
     'not_important not_important-urgent not_important-not_urgent';
 `;
 
-const TaskBoard = ({ tasks }) => {
+const TaskBoard = ({ tasks, isDoneHandler, deleteTaskHandler }) => {
   return (
     <Container>
-      <Card area="important-urgent" important urgent tasks={tasks} />
-      <Card area="important-not_urgent" important urgent={false} tasks={tasks} />
-      <Card area="not_important-urgent" important={false} urgent tasks={tasks} />
-      <Card area="not_important-not_urgent" important={false} urgent={false} tasks={tasks} />
-      <CardDescription area="urgent" text="Urgent" red />
-      <CardDescription area="not_urgent" text="Not urgent" />
-      <CardDescription area="important" text="Important" red rotated />
-      <CardDescription area="not_important" text="Not important" rotated />
+      <Card
+        area="important-urgent"
+        important
+        urgent
+        tasks={tasks}
+        isDoneHandler={isDoneHandler}
+        deleteTaskHandler={deleteTaskHandler}
+      />
+      <Card
+        area="important-not_urgent"
+        important
+        urgent={false}
+        tasks={tasks}
+        isDoneHandler={isDoneHandler}
+        deleteTaskHandler={deleteTaskHandler}
+      />
+      <Card
+        area="not_important-urgent"
+        important={false}
+        urgent
+        tasks={tasks}
+        isDoneHandler={isDoneHandler}
+        deleteTaskHandler={deleteTaskHandler}
+      />
+      <Card
+        area="not_important-not_urgent"
+        important={false}
+        urgent={false}
+        tasks={tasks}
+        isDoneHandler={isDoneHandler}
+        deleteTaskHandler={deleteTaskHandler}
+      />
+      {cardsDescriptionData.map((card) => {
+        return <CardDescription key={card.area} area={card.area} text={card.text} red={card.red} rotated={card.rotated} />;
+      })}
     </Container>
   );
 };

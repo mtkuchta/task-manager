@@ -70,24 +70,53 @@ const StyledForm = styled.form`
   }
 `;
 
-const Form = ({ addTask }) => {
+const Form = ({ addTask, tasks }) => {
   const [textInput, setTextInput] = useState('');
   const [isImportant, setIsImportant] = useState(false);
-  const [isUrgent, setIsUrgetn] = useState(false);
+  const [isUrgent, setIsUrgent] = useState(false);
+
+  const task = { description: textInput, id: tasks.length, isImportant, isUrgent, isDone: false };
 
   const handleInput = (e) => {
     setTextInput(e.target.value);
   };
 
+  const handleImportantCheckbox = () => {
+    setIsImportant(!isImportant);
+  };
+
+  const handleUrgentCheckbox = () => {
+    setIsUrgent(!isUrgent);
+  };
+
+  const clearInput = () => {
+    setTextInput('');
+    setIsImportant(false);
+    setIsUrgent(false);
+  };
+
   return (
-    <StyledForm onSubmit={addTask}>
-      <input type="text" placeholder="new task..." value={textInput} onChange={(e) => handleInput(e)} required />
+    <StyledForm
+      onSubmit={(e) => {
+        addTask(e, task);
+        clearInput();
+      }}
+    >
+      <input
+        type="text"
+        placeholder="new task..."
+        value={textInput}
+        onChange={(e) => {
+          handleInput(e);
+        }}
+        required
+      />
       <div className="checkbox_container">
-        <Checkbox />
+        <Checkbox red handleCheckbox={handleImportantCheckbox} value={isImportant} />
         <p>important</p>
       </div>
       <div className="checkbox_container">
-        <Checkbox />
+        <Checkbox red handleCheckbox={handleUrgentCheckbox} value={isUrgent} />
         <p>urgent</p>
       </div>
       <input type="submit" value="Add task" />

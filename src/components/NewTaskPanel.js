@@ -19,11 +19,11 @@ const Container = styled.div`
   }
 `;
 
-const NewTaskPanel = ({ addTask }) => {
+const NewTaskPanel = ({ addTask, tasks }) => {
   return (
     <Container>
       <h1>Add Task:</h1>
-      <Form addTask={addTask} />
+      <Form addTask={addTask} tasks={tasks} />
     </Container>
   );
 };

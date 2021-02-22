@@ -3,6 +3,7 @@ import Card from './Card';
 import CardDescription from './CardDecription';
 
 import { cardsDescriptionData } from '../assets/cardsDescriptionData';
+import { cardsData } from '../assets/cardsData';
 
 const Container = styled.div`
   width: 95vh;
@@ -16,41 +17,26 @@ const Container = styled.div`
     'not_important not_important-urgent not_important-not_urgent';
 `;
 
-const TaskBoard = ({ tasks, isDoneHandler, deleteTaskHandler }) => {
+const TaskBoard = ({ tasks, isDoneHandler, deleteTaskHandler, dropTask, dragStart, dragOver, dragLeave }) => {
   return (
     <Container>
-      <Card
-        area="important-urgent"
-        important
-        urgent
-        tasks={tasks}
-        isDoneHandler={isDoneHandler}
-        deleteTaskHandler={deleteTaskHandler}
-      />
-      <Card
-        area="important-not_urgent"
-        important
-        urgent={false}
-        tasks={tasks}
-        isDoneHandler={isDoneHandler}
-        deleteTaskHandler={deleteTaskHandler}
-      />
-      <Card
-        area="not_important-urgent"
-        important={false}
-        urgent
-        tasks={tasks}
-        isDoneHandler={isDoneHandler}
-        deleteTaskHandler={deleteTaskHandler}
-      />
-      <Card
-        area="not_important-not_urgent"
-        important={false}
-        urgent={false}
-        tasks={tasks}
-        isDoneHandler={isDoneHandler}
-        deleteTaskHandler={deleteTaskHandler}
-      />
+      {cardsData.map((card, index) => {
+        return (
+          <Card
+            key={index}
+            area={card.area}
+            important={card.important}
+            urgent={card.urgent}
+            tasks={tasks}
+            isDoneHandler={isDoneHandler}
+            deleteTaskHandler={deleteTaskHandler}
+            dropTask={dropTask}
+            dragStart={dragStart}
+            dragOver={dragOver}
+            dragLeave={dragLeave}
+          />
+        );
+      })}
       {cardsDescriptionData.map((card) => {
         return <CardDescription key={card.area} area={card.area} text={card.text} red={card.red} rotated={card.rotated} />;
       })}

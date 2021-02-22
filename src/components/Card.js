@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Task from './Task';
 
@@ -18,11 +19,15 @@ const Container = styled.div`
     transform: rotate(${({ rot }) => `${rot}deg`});
     transition: 0.5s;
     padding: 4%;
+    transition: 0.6s;
+    transform: scale(${({ isOver }) => (isOver ? 1.05 : 1)});
   }
 `;
 
-const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler }) => {
+const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler, dropTask, dragStart, dragOver, dragLeave }) => {
   const rot = Math.random().toFixed(2);
+  const [isOver, setIsOver] = useState(false);
+
   const taskList = tasks.map((task) => {
     if (important === task.isImportant && urgent === task.isUrgent) {
       return (
@@ -34,14 +39,33 @@ const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler
           isDoneHandler={isDoneHandler}
           deleteTaskHandler={deleteTaskHandler}
           isDone={task.isDone}
+          dragStart={dragStart}
         />
       );
     }
   });
 
   return (
-    <Container area={area} rot={rot}>
-      <ul className="card">{taskList}</ul>
+    <Container area={area} rot={rot} isOver={isOver}>
+      <ul
+        className="card"
+        data-important={`${important}`}
+        data-urgent={`${urgent}`}
+        onDragEnd={(e) => {
+          dropTask(e);
+        }}
+        onDrop={() => setIsOver(false)}
+        onDragOver={(e) => {
+          dragOver(e);
+          setIsOver(true);
+        }}
+        onDragLeave={(e) => {
+          dragLeave(e);
+          setIsOver(false);
+        }}
+      >
+        {taskList}
+      </ul>
     </Container>
   );
 };

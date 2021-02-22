@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../assets/styles/globalStyle';
 import { theme } from '../assets/styles/theme';
-import { renumberTasks, taskRenumber } from '../assets/helpers/renumberTasks';
+import { renumberTasks } from '../assets/helpers/renumberTasks';
+import { changeTaskAttributes } from '../assets/helpers/changeTaskAttributes';
 
 import Header from '../layouts/Header';
 import NewTaskPanel from './NewTaskPanel';
@@ -39,6 +40,8 @@ const Aside = styled.aside`
 
 function App() {
   const [data, setData] = useState(tasks);
+  const [draggedTask, setDraggedTask] = useState(null);
+  const [container, setContainer] = useState(null);
 
   const addTask = (e, task) => {
     e.preventDefault();
@@ -67,6 +70,43 @@ function App() {
     setData(tasks);
   };
 
+  const dragStart = (e) => {
+    console.log(e.target.parentNode);
+    const draggedTaskIndex = e.target.firstChild.id;
+    const target = e.target;
+    setDraggedTask(parseInt(draggedTaskIndex));
+    setTimeout(() => {
+      target.style.opacit = 'none';
+    }, 0);
+  };
+
+  const dragOver = (e) => {
+    e.preventDefault();
+    if (container != e.target) {
+      setContainer(e.target);
+    }
+  };
+
+  const dragLeave = (e) => {
+    setContainer(null);
+  };
+
+  const dropTask = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    target.style.display = 'flex';
+    if (container) {
+      const tasks = [...data];
+      const transferedTask = tasks[draggedTask];
+      tasks.splice(draggedTask, 1);
+      tasks.push(changeTaskAttributes(container, transferedTask));
+      renumberTasks(tasks);
+      setData(tasks);
+      setContainer(null);
+      setDraggedTask(null);
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -77,7 +117,15 @@ function App() {
           <NewTaskPanel addTask={addTask} tasks={data} />
         </Aside>
         <Main>
-          <TaskBoard tasks={data} isDoneHandler={handleIsDoneTask} deleteTaskHandler={handleDeleteTask} />
+          <TaskBoard
+            tasks={data}
+            isDoneHandler={handleIsDoneTask}
+            deleteTaskHandler={handleDeleteTask}
+            dropTask={dropTask}
+            dragStart={dragStart}
+            dragOver={dragOver}
+            dragLeave={dragLeave}
+          />
         </Main>
       </Wrapper>
     </ThemeProvider>

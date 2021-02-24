@@ -16,11 +16,10 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.colors.YELLOW};
     filter: drop-shadow(-8px 8px 4px rgba(0, 0, 0, 0.55));
     transform: translateZ(0);
-    transform: rotate(${({ rot }) => `${rot}deg`});
+    transform: rotate(${({ rot }) => `${rot}deg`}) scale(${({ isOver }) => (isOver ? 1.05 : 1)});
     transition: 0.5s;
     padding: 4%;
     transition: 0.6s;
-    transform: scale(${({ isOver }) => (isOver ? 1.05 : 1)});
   }
 `;
 

@@ -51,18 +51,7 @@ const Container = styled.li`
   }
 `;
 
-const Task = ({ id, description, rot, isDoneHandler, deleteTaskHandler, isDone, dragStart }) => {
-  // const dragStart = (e) => {
-  //   // e.preventDefault();
-  //   // e.stopPropagation();
-  //   const target = e.target;
-  //   e.dataTransfer.setData('dragging', target.firstChild.id);
-  //   console.log(e.dataTransfer);
-  //   setTimeout(() => {
-  //     target.style.display = 'none';
-  //   }, 0);
-  // };
-
+const Task = ({ id, description, isDoneHandler, deleteTaskHandler, isDone, dragStart }) => {
   return (
     <Container isDone={isDone} draggable={true} onDragStart={dragStart}>
       <Checkbox handleCheckbox={isDoneHandler} value={isDone} id={id} />

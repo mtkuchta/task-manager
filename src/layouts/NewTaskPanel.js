@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import Form from './Form';
+import AddTask from '../components/AddTask';
 
 const Container = styled.div`
   width: 90%;
@@ -23,7 +22,7 @@ const NewTaskPanel = ({ addTask, tasks }) => {
   return (
     <Container>
       <h1>Add Task:</h1>
-      <Form addTask={addTask} tasks={tasks} />
+      <AddTask addTask={addTask} tasks={tasks} />
     </Container>
   );
 };

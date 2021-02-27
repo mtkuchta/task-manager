@@ -4,6 +4,9 @@ import Checkbox from './Checkbox';
 import SubmitButton from './SubmitButton';
 import Input from './Input';
 
+import { addTask } from '../actions/actions';
+import { connect } from 'react-redux';
+
 const StyledForm = styled.form`
   width: 100%;
   display: flex;
@@ -56,13 +59,14 @@ const AddTask = ({ addTask, tasks }) => {
     setIsUrgent(false);
   };
 
+  const addNewTask = (e, task) => {
+    e.preventDefault();
+    addTask(task);
+    clearInput();
+  };
+
   return (
-    <StyledForm
-      onSubmit={(e) => {
-        addTask(e, task);
-        clearInput();
-      }}
-    >
+    <StyledForm onSubmit={(e) => addNewTask(e, task)}>
       <Input value={textInput} type="text" placeholder="new task..." inputHandler={handleInput} />
       <div className="checkbox_container">
         <Checkbox red handleCheckbox={handleImportantCheckbox} value={isImportant} />
@@ -77,4 +81,13 @@ const AddTask = ({ addTask, tasks }) => {
   );
 };
 
-export default AddTask;
+const mapDispatchToProps = (dispatch) => ({
+  addTask: (task) => dispatch(addTask(task)),
+});
+
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.tasks,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

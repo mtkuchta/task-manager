@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { dragLeave, dragOver, dropTask, clearState } from '../actions/actions';
 import Task from './Task';
 
 const Container = styled.div`
@@ -23,24 +25,34 @@ const Container = styled.div`
   }
 `;
 
-const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler, dropTask, dragStart, dragOver, dragLeave }) => {
+const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver, dragLeave, dropTask, clearState }) => {
   const rot = Math.random().toFixed(2);
   const [isOver, setIsOver] = useState(false);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    if (dragAndDrop.container != e.target) {
+      console.log('over');
+      dragOver(e.target);
+    }
+  };
+
+  const handleDropTask = (e) => {
+    e.preventDefault();
+    const target = e.target;
+    console.log(target);
+    target.style.opacity = '1';
+    if (dragAndDrop.container) {
+      console.log('jestesm');
+      const transferedTask = tasks[dragAndDrop.draggedTask];
+      const container = dragAndDrop.container;
+      dropTask({ transferedTask, container });
+    }
+  };
+
   const taskList = tasks.map((task) => {
     if (important === task.isImportant && urgent === task.isUrgent) {
-      return (
-        <Task
-          key={task.id}
-          id={task.id}
-          description={task.description}
-          rot={rot}
-          isDoneHandler={isDoneHandler}
-          deleteTaskHandler={deleteTaskHandler}
-          isDone={task.isDone}
-          dragStart={dragStart}
-        />
-      );
+      return <Task key={task.id} id={task.id} description={task.description} rot={rot} />;
     }
   });
 
@@ -51,16 +63,21 @@ const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler
         data-important={`${important}`}
         data-urgent={`${urgent}`}
         onDragEnd={(e) => {
-          dropTask(e);
+          handleDropTask(e);
+          clearState();
         }}
-        onDrop={() => setIsOver(false)}
+        onDrop={() => {
+          setIsOver(false);
+        }}
         onDragOver={(e) => {
-          dragOver(e);
+          handleDragOver(e);
           setIsOver(true);
         }}
         onDragLeave={(e) => {
+          e.preventDefault();
           dragLeave(e);
           setIsOver(false);
+          console.log('dupa');
         }}
       >
         {taskList}
@@ -69,4 +86,18 @@ const Card = ({ area, important, urgent, tasks, isDoneHandler, deleteTaskHandler
   );
 };
 
-export default Card;
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.tasks,
+    dragAndDrop: state.dragAndDrop,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  dragOver: (task) => dispatch(dragOver(task)),
+  dragLeave: () => dispatch(dragLeave()),
+  dropTask: (payload) => dispatch(dropTask(payload)),
+  clearState: () => dispatch(clearState()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

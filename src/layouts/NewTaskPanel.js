@@ -18,11 +18,11 @@ const Container = styled.div`
   }
 `;
 
-const NewTaskPanel = ({ addTask, tasks }) => {
+const NewTaskPanel = () => {
   return (
     <Container>
       <h1>Add Task:</h1>
-      <AddTask addTask={addTask} tasks={tasks} />
+      <AddTask />
     </Container>
   );
 };

@@ -32,7 +32,6 @@ const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver
   const handleDragOver = (e) => {
     e.preventDefault();
     if (dragAndDrop.container != e.target) {
-      console.log('over');
       dragOver(e.target);
     }
   };
@@ -40,10 +39,8 @@ const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver
   const handleDropTask = (e) => {
     e.preventDefault();
     const target = e.target;
-    console.log(target);
     target.style.opacity = '1';
     if (dragAndDrop.container) {
-      console.log('jestesm');
       const transferedTask = tasks[dragAndDrop.draggedTask];
       const container = dragAndDrop.container;
       dropTask({ transferedTask, container });

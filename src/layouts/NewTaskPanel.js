@@ -3,8 +3,8 @@ import AddTask from '../components/AddTask';
 
 const Container = styled.div`
   width: 90%;
-  height: 30%;
-  flex-direction: row;
+  height: 28%;
+  /* flex-direction: row; */
   margin: 0 auto;
   background-color: ${({ theme }) => theme.colors.YELLOW};
   padding: 15px 10px;

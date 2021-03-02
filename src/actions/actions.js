@@ -29,3 +29,14 @@ export const dropTask = (payload) => {
 export const clearState = () => {
   return { type: 'DROP_TASK' };
 };
+
+export const logIn = (user) => {
+  return { type: 'LOG_IN', user };
+};
+
+export const setLogError = (message) => {
+  return { type: 'LOG_ERROR', message };
+};
+export const clearLogError = () => {
+  return { type: 'CLEAR_ERROR' };
+};

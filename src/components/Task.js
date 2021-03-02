@@ -69,7 +69,6 @@ const Task = ({ id, description, deleteTask, changeTaskStatus, startDrag, tasks:
   const handleDragStart = (e) => {
     const draggedTaskIndex = e.target.firstChild.id;
     const target = e.target;
-    console.log(target);
     setTimeout(() => {
       target.style.opacity = '0';
     }, 0);

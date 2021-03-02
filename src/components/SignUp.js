@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { newUser } from '../services/firebase';
 
 import AppLogo from './AppLogo';
 import SubmitButton from './SubmitButton';
@@ -30,7 +31,7 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const SignUp = ({ handlerCreateUser }) => {
+const SignUp = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -46,12 +47,20 @@ const SignUp = ({ handlerCreateUser }) => {
     setConfirmedPassword(e.target.value);
   };
 
+  const handleCreateUser = (e) => {
+    e.preventDefault();
+    if (password === confirmedPassword) newUser(userName, password);
+    setUserName('');
+    setPassword('');
+    setConfirmedPassword('');
+  };
+
   return (
     <Container>
       <AppLogo />
       <div className="description">Create new account:</div>
-      <Form onSubmit={handlerCreateUser}>
-        <Input placeholder="user name" type="text" value={userName} inputHandler={handleUserNameInput} />
+      <Form onSubmit={handleCreateUser}>
+        <Input placeholder="email" type="text" value={userName} inputHandler={handleUserNameInput} />
         <Input placeholder="password" type="password" value={password} inputHandler={handlePasswordInput} />
         <Input
           placeholder="confirm password"

@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { auth } from '../services/firebase';
+import { logIn, setLogError, clearLogError } from '../actions/actions';
 
 import AppLogo from './AppLogo';
 import SubmitButton from './SubmitButton';
 import Input from './Input';
+import Error from './Error';
 
 const Container = styled.div`
   width: 40vh;
@@ -30,9 +36,11 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const LogIn = ({ handleLogin }) => {
+const LogIn = ({ user, logIn, setLogError, clearLogError }) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+
+  const history = useHistory();
 
   const handleUserNameInput = (e) => {
     setUserName(e.target.value);
@@ -42,11 +50,25 @@ const LogIn = ({ handleLogin }) => {
     setPassword(e.target.value);
   };
 
+  const handleLogin = (e, userName, password) => {
+    e.preventDefault();
+    clearLogError();
+    auth()
+      .signInWithEmailAndPassword(userName, password)
+      .then((user) => logIn(user))
+      .catch((error) => setLogError(error.message));
+    history.push('/');
+
+    setUserName('');
+    setPassword('');
+  };
+
   return (
     <Container>
       <AppLogo />
+      {user.error ? <Error message={user.error || ''} /> : null}
       <Form onSubmit={(e) => handleLogin(e, userName, password)}>
-        <Input placeholder="user name" type="text" value={userName} inputHandler={handleUserNameInput} />
+        <Input placeholder="email" type="text" value={userName} inputHandler={handleUserNameInput} />
         <Input placeholder="password" type="password" value={password} inputHandler={handlePasswordInput} />
         <SubmitButton value="Log in" />
       </Form>
@@ -57,4 +79,16 @@ const LogIn = ({ handleLogin }) => {
   );
 };
 
-export default LogIn;
+const mapDispatchToProps = (dispatch) => ({
+  logIn: (user) => dispatch(logIn(user)),
+  setLogError: (message) => dispatch(setLogError(message)),
+  clearLogError: () => dispatch(clearLogError()),
+});
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

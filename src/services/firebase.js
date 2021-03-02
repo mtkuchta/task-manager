@@ -9,22 +9,32 @@ const firebaseConfig = {
   messagingSenderId: '803205366966',
   appId: '1:803205366966:web:40f20341d359b8482c5217',
 };
-
+export const auth = firebase.auth;
 firebase.initializeApp(firebaseConfig);
 
 export const newUser = (email, password) => {
-  firebase.auth().createUserWithEmailAndPassword(email, password).then();
+  return firebase.auth().createUserWithEmailAndPassword(email, password);
 };
 
 export const appAuth = (email, password) => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      console.log('user');
-    })
-    .catch((error) => console.log(error));
-  console.log('bangla');
+  firebase.auth().signInWithEmailAndPassword(email, password);
+  // firebase
+  //   .auth()
+  //   .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  //   .then(() => {
+  //     // Existing and future Auth states are now persisted in the current
+  //     // session only. Closing the window would clear any existing state even
+  //     // if a user forgets to sign out.
+  //     // ...
+  //     // New sign-in will be persisted with session persistence.
+  //     return firebase.auth().signInWithEmailAndPassword(email, password);
+  //   })
+  //   .catch((error) => {});
 };
 
-export const auth = firebase.auth;
+export const logout = () => {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => console.log('wylogowano'));
+};

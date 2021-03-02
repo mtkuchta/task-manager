@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { connect } from 'react-redux';
 
 import { GlobalStyle } from '../assets/styles/globalStyle';
 import { theme } from '../assets/styles/theme';
-import { changeTaskAttributes } from '../assets/helpers/changeTaskAttributes';
 
 import Header from '../layouts/Header';
 import LoginPage from '../layouts/LoginPage';
@@ -12,11 +12,11 @@ import NewTaskPanel from '../layouts/NewTaskPanel';
 import SignUpPage from '../layouts/SignUpPage';
 import TaskBoard from './TaskBoard';
 import UserPanel from './UserPanel';
+import AuthRoute from './AuthRoute';
 
-import { appAuth } from '../services/firebase';
 import { auth } from '../services/firebase';
 
-import { connect } from 'react-redux';
+import { logIn } from '../actions/actions';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -40,23 +40,12 @@ const Aside = styled.aside`
   height: 100%;
 `;
 
-function App({ tasks: { tasks } }) {
-  // const [currentUser, setCurrentUser] = useState(null);
-
+function App({ user, logIn }) {
   useEffect(() => {
-    // const unsubscribe = auth().onAuthStateChanged((data) => setCurrentUser(data));
-    // return () => unsubscribe();
+    const unsubscribe = auth().onAuthStateChanged((data) => logIn(data));
+
+    return () => unsubscribe();
   }, []);
-
-  // const handleCreateUser = (e) => {
-  //   e.preventDefault();
-  //   console.log('create');
-  // };
-
-  // const handleLogin = (e, email, password) => {
-  //   e.preventDefault();
-  //   appAuth(email, password);
-  // };
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,22 +54,19 @@ function App({ tasks: { tasks } }) {
         <Wrapper>
           <Aside>
             <Header />
-            <UserPanel />
-            <NewTaskPanel />
+            {user.currentUser ? <UserPanel /> : null}
+            {user.currentUser ? <NewTaskPanel /> : null}
           </Aside>
           <Switch>
-            {/* <Route path="/login">
-              <LoginPage handleLogin={handleLogin} />
-            </Route>
+            <Route path="/login">{!user.currentUser ? <LoginPage /> : <Redirect to="/" />}</Route>
             <Route path="/signup">
-              <SignUpPage handlerCreateUser={handleCreateUser} />
-            </Route> */}
-
-            <Route exact path="/">
+              <SignUpPage />
+            </Route>
+            <AuthRoute exact path="/">
               <Main>
                 <TaskBoard />
               </Main>
-            </Route>
+            </AuthRoute>
           </Switch>
         </Wrapper>
       </Router>
@@ -90,8 +76,12 @@ function App({ tasks: { tasks } }) {
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks,
+    user: state.user,
   };
 };
 
-export default connect(mapStateToProps, {})(App);
+const mapDispatchToProps = (dispatch) => ({
+  logIn: (user) => dispatch(logIn(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

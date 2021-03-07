@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import Card from './Card';
-import CardDescription from './CardDecription';
+import Card from '../Card/Card';
+import CardDescription from '../CardDescription/CardDecription';
 
-import { cardsDescriptionData } from '../assets/cardsDescriptionData';
-import { cardsData } from '../assets/cardsData';
+import { cardsDescriptionData } from '../../assets/cardsDescriptionData';
+import { cardsData } from '../../assets/cardsData';
 
 const Container = styled.div`
   width: 95vh;

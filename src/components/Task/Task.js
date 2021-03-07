@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import deleteIcon from '../assets/icons/cancel.png';
+import deleteIcon from '../../assets/icons/cancel.png';
 
-import { changeTaskStatus, deleteTask, startDrag } from '../actions/actions';
+import { findIsTaskDone } from '../../assets/helpers/findIsTaskDone';
+import { changeTaskStatus, deleteTask, startDrag } from '../../actions/actions';
+import { updateTaskInDatabase, deleteTaskInDatabase } from '../../services/firebase';
 
-import Checkbox from './Checkbox';
+import Checkbox from '../Checkbox/Checkbox';
 
 const Container = styled.li`
   width: 100%;
@@ -55,15 +57,17 @@ const Container = styled.li`
   }
 `;
 
-const Task = ({ id, description, deleteTask, changeTaskStatus, startDrag, tasks: { tasks } }) => {
+const Task = ({ id, description, deleteTask, changeTaskStatus, startDrag, tasks, user }) => {
   const handleDeleteTask = (e) => {
     const idToDelete = parseInt(e.target.parentNode.dataset.index);
     deleteTask(idToDelete);
+    deleteTaskInDatabase(user, idToDelete);
   };
 
   const handleIsDoneTask = (e) => {
     const taskID = parseInt(e.target.parentNode.id);
     changeTaskStatus(taskID);
+    updateTaskInDatabase(user, tasks, taskID);
   };
 
   const handleDragStart = (e) => {
@@ -76,8 +80,8 @@ const Task = ({ id, description, deleteTask, changeTaskStatus, startDrag, tasks:
   };
 
   return (
-    <Container isDone={tasks[id].isDone} draggable={true} onDragStart={handleDragStart}>
-      <Checkbox handleCheckbox={handleIsDoneTask} value={tasks[id].isDone} id={id} />
+    <Container isDone={findIsTaskDone(tasks, id)} draggable={true} onDragStart={handleDragStart}>
+      <Checkbox handleCheckbox={handleIsDoneTask} value={findIsTaskDone(tasks, id)} id={id} />
       <p className="description">{description}</p>
       <button className="delete" onClick={handleDeleteTask} data-index={id}>
         <img src={deleteIcon}></img>
@@ -94,8 +98,9 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks,
+    tasks: state.tasks.tasks,
     dragAndDrop: state.dragAndDrop,
+    user: state.user,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Task);

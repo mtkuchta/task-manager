@@ -3,20 +3,20 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import styled, { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 
-import { GlobalStyle } from '../assets/styles/globalStyle';
-import { theme } from '../assets/styles/theme';
+import { GlobalStyle } from '../../assets/styles/globalStyle';
+import { theme } from '../../assets/styles/theme';
 
-import Header from '../layouts/Header';
-import LoginPage from '../layouts/LoginPage';
-import NewTaskPanel from '../layouts/NewTaskPanel';
-import SignUpPage from '../layouts/SignUpPage';
-import TaskBoard from './TaskBoard';
-import UserPanel from './UserPanel';
-import AuthRoute from './AuthRoute';
+import Header from '../../layouts/Header';
+import LoginPage from '../../layouts/LoginPage';
+import NewTaskPanel from '../../layouts/NewTaskPanel';
+import SignUpPage from '../../layouts/SignUpPage';
+import TaskBoard from '../TaskBoard/TaskBoard';
+import UserPanel from '../UserPanel/UserPanel';
+import AuthRoute from '../AuthRoute/AuthRoute';
 
-import { auth } from '../services/firebase';
+import { auth, getTasksfromDatabase } from '../../services/firebase';
 
-import { logIn } from '../actions/actions';
+import { logIn, fetchTasks } from '../../actions/actions';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -40,12 +40,16 @@ const Aside = styled.aside`
   height: 100%;
 `;
 
-function App({ user, logIn }) {
+function App({ user, logIn, fetchTasks }) {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((data) => logIn(data));
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(async () => {
+    fetchTasks(await getTasksfromDatabase(user));
+  }, [user.currentUser]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -82,6 +86,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   logIn: (user) => dispatch(logIn(user)),
+  fetchTasks: (tasks) => dispatch(fetchTasks(tasks)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,3 +1,7 @@
+export const fetchTasks = (tasks) => {
+  return { type: 'FETCH_TASKS', tasks };
+};
+
 export const addTask = (task) => {
   return { type: 'ADD_TASK', task };
 };

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Checkbox from './Checkbox';
-import SubmitButton from './SubmitButton';
-import Input from './Input';
-
-import { addTask } from '../actions/actions';
 import { connect } from 'react-redux';
+
+import { addTask } from '../../actions/actions';
+import { setTaskID } from '../../assets/helpers/setTaskID';
+import { addTaskToDatabase } from '../../services/firebase';
+
+import Checkbox from '../Checkbox/Checkbox';
+import SubmitButton from '../SubmitButton/SubmitButton';
+import Input from '../Input/Input';
 
 const StyledForm = styled.form`
   width: 100%;
@@ -34,12 +37,12 @@ const StyledForm = styled.form`
   }
 `;
 
-const AddTask = ({ addTask, tasks }) => {
+const AddTask = ({ addTask, tasks, user: { currentUser } }) => {
   const [textInput, setTextInput] = useState('');
   const [isImportant, setIsImportant] = useState(false);
   const [isUrgent, setIsUrgent] = useState(false);
 
-  const task = { description: textInput, id: tasks.length, isImportant, isUrgent, isDone: false };
+  const task = { description: textInput, id: setTaskID(tasks), isImportant, isUrgent, isDone: false };
 
   const handleInput = (e) => {
     setTextInput(e.target.value);
@@ -63,6 +66,7 @@ const AddTask = ({ addTask, tasks }) => {
     e.preventDefault();
     addTask(task);
     clearInput();
+    addTaskToDatabase(currentUser.uid, task);
   };
 
   return (
@@ -87,7 +91,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks,
+    tasks: state.tasks.tasks,
+    user: state.user,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { dragLeave, dragOver, dropTask, clearState } from '../actions/actions';
-import Task from './Task';
+import { dragLeave, dragOver, dropTask, clearState } from '../../actions/actions';
+import { updateTaskInDatabase } from '../../services/firebase';
+import Task from '../Task/Task';
 
 const Container = styled.div`
   height: 100%;
@@ -25,7 +26,7 @@ const Container = styled.div`
   }
 `;
 
-const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver, dragLeave, dropTask, clearState }) => {
+const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dragLeave, dropTask, clearState }) => {
   const rot = Math.random().toFixed(2);
   const [isOver, setIsOver] = useState(false);
 
@@ -41,9 +42,10 @@ const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver
     const target = e.target;
     target.style.opacity = '1';
     if (dragAndDrop.container) {
-      const transferedTask = tasks[dragAndDrop.draggedTask];
+      const transferedTask = tasks[tasks.findIndex((el) => el.id === dragAndDrop.draggedTask)];
       const container = dragAndDrop.container;
       dropTask({ transferedTask, container });
+      updateTaskInDatabase(user, tasks, transferedTask.id);
     }
   };
 
@@ -74,7 +76,6 @@ const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver
           e.preventDefault();
           dragLeave(e);
           setIsOver(false);
-          console.log('dupa');
         }}
       >
         {taskList}
@@ -85,8 +86,9 @@ const Card = ({ area, important, urgent, tasks: { tasks }, dragAndDrop, dragOver
 
 const mapStateToProps = (state) => {
   return {
-    tasks: state.tasks,
+    tasks: state.tasks.tasks,
     dragAndDrop: state.dragAndDrop,
+    user: state.user,
   };
 };
 

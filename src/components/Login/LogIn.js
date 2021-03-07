@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { auth } from '../services/firebase';
-import { logIn, setLogError, clearLogError } from '../actions/actions';
+import { auth } from '../../services/firebase';
+import { logIn, setLogError, clearLogError } from '../../actions/actions';
 
-import AppLogo from './AppLogo';
-import SubmitButton from './SubmitButton';
-import Input from './Input';
-import Error from './Error';
+import AppLogo from '../AppLogo/AppLogo';
+import SubmitButton from '../SubmitButton/SubmitButton';
+import Input from '../Input/Input';
+import Error from '../Error/Error';
 
 const Container = styled.div`
   width: 40vh;

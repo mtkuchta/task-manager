@@ -1,13 +1,12 @@
-import { renumberTasks } from '../assets/helpers/renumberTasks';
 import { changeTaskAttributes } from '../assets/helpers/changeTaskAttributes';
 
 const initialState = {
   tasks: [
-    { description: 'Zrobić portfolio', id: 0, isImportant: true, isUrgent: true, isDone: false },
-    { description: 'Napisać CV', id: 1, isImportant: true, isUrgent: true, isDone: false },
-    { description: 'skoczyć na bangi', id: 2, isImportant: false, isUrgent: false, isDone: false },
-    { description: 'Odpisać na maile LinkedIn', id: 3, isImportant: false, isUrgent: true, isDone: false },
-    { description: 'Kupić ciuchy', id: 4, isImportant: true, isUrgent: false, isDone: false },
+    // { description: 'Zrobić portfolio', id: 0, isImportant: true, isUrgent: true, isDone: false },
+    // { description: 'Napisać CV', id: 1, isImportant: true, isUrgent: true, isDone: false },
+    // { description: 'skoczyć na bangi', id: 2, isImportant: false, isUrgent: false, isDone: false },
+    // { description: 'Odpisać na maile LinkedIn', id: 3, isImportant: false, isUrgent: true, isDone: false },
+    // { description: 'Kupić ciuchy', id: 4, isImportant: true, isUrgent: false, isDone: false },
   ],
 };
 
@@ -21,7 +20,6 @@ const deleteTask = (tasks, taskID) => {
   const tasksList = [...tasks];
   const taskToDeleteIndex = tasksList.findIndex((task) => task.id === taskID);
   tasksList.splice(taskToDeleteIndex, 1);
-  renumberTasks(tasksList);
   return tasksList;
 };
 
@@ -37,14 +35,17 @@ const changeTaskStatus = (tasks, taskID) => {
 
 const changeAttributes = (tasks, payload) => {
   const tasksList = [...tasks];
-  tasksList.splice(parseInt(payload.transferedTask.id), 1);
+  console.log(payload.transferedTask.id);
+  const index = tasksList.findIndex((element) => element.id === parseInt(payload.transferedTask.id));
+  tasksList.splice(index, 1);
   tasksList.push(changeTaskAttributes(payload.container, payload.transferedTask));
-  renumberTasks(tasksList);
   return tasksList;
 };
 
 export const taskReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'FETCH_TASKS':
+      return { ...state, tasks: action.tasks };
     case 'ADD_TASK':
       return { ...state, tasks: pushTask(state.tasks, action.task) };
     case 'DELETE_TASK':

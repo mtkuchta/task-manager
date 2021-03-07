@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import AppLogo from '../components/AppLogo';
+import AppLogo from '../components/AppLogo/AppLogo';
 
 const StyledHeader = styled.header`
   width: 100%;

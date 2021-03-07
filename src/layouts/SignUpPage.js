@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import SignUp from '../components/SignUp';
+import SignUp from '../components/SignUp/SignUp';
 
 const Container = styled.div`
   width: 100%;

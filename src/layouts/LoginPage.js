@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import LogIn from '../components/LogIn';
+import LogIn from '../components/Login/LogIn';
 
 const Container = styled.div`
   width: 100%;

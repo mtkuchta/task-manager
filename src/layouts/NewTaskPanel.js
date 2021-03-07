@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import AddTask from '../components/AddTask';
+import AddTask from '../components/AddTask/AddTask';
 
 const Container = styled.div`
   width: 90%;

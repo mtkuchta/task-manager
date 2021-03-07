@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { connect } from 'react-redux';
 
-import { logout } from '../services/firebase';
+import { logout } from '../../services/firebase';
 
 const Container = styled.div`
   display: flex;

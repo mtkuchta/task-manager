@@ -1,54 +1,21 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { auth } from '../../services/firebase';
-import { logIn, setLogError, clearLogError } from '../../actions/actions';
+import { logIn, setLogError, clearLogError } from '../../actions/userActions';
+
+import { Container, Form } from './LogIn.styles';
 
 import AppLogo from '../AppLogo/AppLogo';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import Input from '../Input/Input';
 import Error from '../Error/Error';
+import { changeInput, clearInput } from '../../actions/logInActions';
 
-const Container = styled.div`
-  width: 40vh;
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  background-color: ${({ theme }) => theme.colors.YELLOW};
-  filter: drop-shadow(-8px 8px 4px rgba(0, 0, 0, 0.55));
-
-  .signUp {
-    width: 100%;
-    text-align: center;
-    font-size: 1.5em;
-  }
-`;
-
-const Form = styled.form`
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const LogIn = ({ user, logIn, setLogError, clearLogError }) => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-
+const LogIn = ({ user, logIn, setLogError, clearLogError, changeInput, logInForm, clearInput }) => {
   const history = useHistory();
-
-  const handleUserNameInput = (e) => {
-    setUserName(e.target.value);
-  };
-
-  const handlePasswordInput = (e) => {
-    setPassword(e.target.value);
-  };
 
   const handleLogin = (e, userName, password) => {
     e.preventDefault();
@@ -58,18 +25,26 @@ const LogIn = ({ user, logIn, setLogError, clearLogError }) => {
       .then((user) => logIn(user))
       .catch((error) => setLogError(error.message));
     history.push('/');
+    clearInput();
+  };
 
-    setUserName('');
-    setPassword('');
+  const handleInputChange = (e) => {
+    changeInput({ name: e.target.name, value: e.target.value });
   };
 
   return (
     <Container>
       <AppLogo />
       {user.error ? <Error message={user.error || ''} /> : null}
-      <Form onSubmit={(e) => handleLogin(e, userName, password)}>
-        <Input placeholder="email" type="text" value={userName} inputHandler={handleUserNameInput} />
-        <Input placeholder="password" type="password" value={password} inputHandler={handlePasswordInput} />
+      <Form onSubmit={(e) => handleLogin(e, logInForm.email, logInForm.password)}>
+        <Input name="email" placeholder="email" type="text" value={logInForm.email} inputHandler={handleInputChange} />
+        <Input
+          name="password"
+          placeholder="password"
+          type="password"
+          value={logInForm.password}
+          inputHandler={handleInputChange}
+        />
         <SubmitButton value="Log in" />
       </Form>
       <div className="signUp">
@@ -83,11 +58,14 @@ const mapDispatchToProps = (dispatch) => ({
   logIn: (user) => dispatch(logIn(user)),
   setLogError: (message) => dispatch(setLogError(message)),
   clearLogError: () => dispatch(clearLogError()),
+  changeInput: (payload) => dispatch(changeInput(payload)),
+  clearInput: () => dispatch(clearInput()),
 });
 
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    logInForm: state.logIn,
   };
 };
 

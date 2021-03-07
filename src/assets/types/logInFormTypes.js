@@ -1,0 +1,4 @@
+const CHANGE_INPUT = 'CHANGE_INPUT';
+const CLEAR_INPUT = 'CLEAR_INPUT';
+
+export default { CHANGE_INPUT, CLEAR_INPUT };

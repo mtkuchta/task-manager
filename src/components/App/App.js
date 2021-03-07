@@ -1,44 +1,25 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 
 import { GlobalStyle } from '../../assets/styles/globalStyle';
 import { theme } from '../../assets/styles/theme';
 
-import Header from '../../layouts/Header';
-import LoginPage from '../../layouts/LoginPage';
-import NewTaskPanel from '../../layouts/NewTaskPanel';
-import SignUpPage from '../../layouts/SignUpPage';
+import Header from '../../layouts/Header/Header';
+import LoginPage from '../../layouts/LoginPage/LoginPage';
+import NewTaskPanel from '../../layouts/NewTaskPanel/NewTaskPanel';
+import SignUpPage from '../../layouts/SignUpPage/SignUpPage';
 import TaskBoard from '../TaskBoard/TaskBoard';
 import UserPanel from '../UserPanel/UserPanel';
 import AuthRoute from '../AuthRoute/AuthRoute';
 
+import { Wrapper, Main, Aside } from './App.styles';
+
 import { auth, getTasksfromDatabase } from '../../services/firebase';
 
-import { logIn, fetchTasks } from '../../actions/actions';
-
-const Wrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  background: linear-gradient(to top right, ${({ theme }) => theme.colors.CADET}, transparent);
-`;
-
-const Main = styled.main`
-  height: 100%;
-  width: 75%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Aside = styled.aside`
-  width: 30%;
-  min-width: 300px;
-  max-width: 400px;
-  height: 100%;
-`;
+import { fetchTasks } from '../../actions/taskActions';
+import { logIn } from '../../actions/userActions';
 
 function App({ user, logIn, fetchTasks }) {
   useEffect(() => {

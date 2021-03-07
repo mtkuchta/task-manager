@@ -1,12 +1,14 @@
+import types from '../assets/types/userTypes';
+
 const initialState = { currentUser: null, error: null };
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'LOG_IN':
+    case types.LOG_IN:
       return { ...state, currentUser: action.user };
-    case 'LOG_ERROR':
+    case types.LOG_ERROR:
       return { ...state, error: action.message };
-    case 'CLEAR_ERROR':
+    case types.CLEAR_ERROR:
       return { ...state, error: null };
     default:
       return state;

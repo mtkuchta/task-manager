@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import { connect } from 'react-redux';
 
-import { addTask } from '../../actions/actions';
+import { StyledForm } from './AddTask.styles';
+
+import { addTask } from '../../actions/taskActions';
+import { changeTaskInput, clearTaskInput } from '../../actions/addTaskActions';
 import { setTaskID } from '../../assets/helpers/setTaskID';
 import { addTaskToDatabase } from '../../services/firebase';
 
@@ -10,74 +12,39 @@ import Checkbox from '../Checkbox/Checkbox';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import Input from '../Input/Input';
 
-const StyledForm = styled.form`
-  width: 100%;
-  display: flex;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  flex-grow: 0;
-  justify-content: center;
-
-  }
-  .checkbox_container {
-    width: 49%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-
-    p {
-      display: block;
-      width: 50%;
-      font-size: 1.5em;
-      font-weight: bold;
-      padding-left: 10px;
-      color: #333;
-    }
-  }
-`;
-
-const AddTask = ({ addTask, tasks, user: { currentUser } }) => {
-  const [textInput, setTextInput] = useState('');
-  const [isImportant, setIsImportant] = useState(false);
-  const [isUrgent, setIsUrgent] = useState(false);
-
-  const task = { description: textInput, id: setTaskID(tasks), isImportant, isUrgent, isDone: false };
-
-  const handleInput = (e) => {
-    setTextInput(e.target.value);
-  };
-
-  const handleImportantCheckbox = () => {
-    setIsImportant(!isImportant);
-  };
-
-  const handleUrgentCheckbox = () => {
-    setIsUrgent(!isUrgent);
-  };
-
-  const clearInput = () => {
-    setTextInput('');
-    setIsImportant(false);
-    setIsUrgent(false);
+const AddTask = ({ addTask, tasks, user: { currentUser }, addTaskForm, changeTaskInput, clearTaskInput }) => {
+  const task = {
+    description: addTaskForm.task,
+    id: setTaskID(tasks),
+    isImportant: addTaskForm.isImportant,
+    isUrgent: addTaskForm.isUrgent,
+    isDone: false,
   };
 
   const addNewTask = (e, task) => {
     e.preventDefault();
     addTask(task);
-    clearInput();
     addTaskToDatabase(currentUser.uid, task);
+    clearTaskInput();
+  };
+
+  const handleInputChange = (e) => {
+    changeTaskInput({ name: e.target.name, value: e.target.value });
+  };
+
+  const handleCheckbox = (e) => {
+    changeTaskInput({ name: e.target.name, value: e.target.checked });
   };
 
   return (
     <StyledForm onSubmit={(e) => addNewTask(e, task)}>
-      <Input value={textInput} type="text" placeholder="new task..." inputHandler={handleInput} />
+      <Input name="task" value={addTaskForm.task} type="text" placeholder="new task..." inputHandler={handleInputChange} />
       <div className="checkbox_container">
-        <Checkbox red handleCheckbox={handleImportantCheckbox} value={isImportant} />
+        <Checkbox name="isImportant" red handleCheckbox={handleCheckbox} value={addTaskForm.isImportant} />
         <p>important</p>
       </div>
       <div className="checkbox_container">
-        <Checkbox red handleCheckbox={handleUrgentCheckbox} value={isUrgent} />
+        <Checkbox name="isUrgent" red handleCheckbox={handleCheckbox} value={addTaskForm.isUrgent} />
         <p>urgent</p>
       </div>
       <SubmitButton value="Add task" />
@@ -87,12 +54,15 @@ const AddTask = ({ addTask, tasks, user: { currentUser } }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   addTask: (task) => dispatch(addTask(task)),
+  changeTaskInput: (payload) => dispatch(changeTaskInput(payload)),
+  clearTaskInput: () => dispatch(clearTaskInput()),
 });
 
 const mapStateToProps = (state) => {
   return {
     tasks: state.tasks.tasks,
     user: state.user,
+    addTaskForm: state.addTask,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

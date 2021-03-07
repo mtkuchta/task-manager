@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import AddTask from '../components/AddTask/AddTask';
 
-const Container = styled.div`
+export const Container = styled.div`
   width: 90%;
   height: 28%;
   /* flex-direction: row; */
@@ -17,14 +16,3 @@ const Container = styled.div`
     padding: 5px 0 10px 10px;
   }
 `;
-
-const NewTaskPanel = () => {
-  return (
-    <Container>
-      <h1>Add Task:</h1>
-      <AddTask />
-    </Container>
-  );
-};
-
-export default NewTaskPanel;

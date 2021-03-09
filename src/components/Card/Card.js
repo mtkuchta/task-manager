@@ -10,6 +10,7 @@ import { Container } from './Card.styles';
 const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dragLeave, dropTask, clearState }) => {
   const rot = Math.random().toFixed(2);
   const [isOver, setIsOver] = useState(false);
+  let taskList = [];
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -29,12 +30,13 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
       updateTaskInDatabase(user, tasks, transferedTask.id);
     }
   };
-
-  const taskList = tasks.map((task) => {
-    if (important === task.isImportant && urgent === task.isUrgent) {
-      return <Task key={task.id} id={task.id} description={task.description} rot={rot} />;
-    }
-  });
+  if (tasks.length >= 1) {
+    taskList = tasks.map((task) => {
+      if (important === task.isImportant && urgent === task.isUrgent) {
+        return <Task key={task.id} id={task.id} description={task.description} rot={rot} />;
+      }
+    });
+  }
 
   return (
     <Container area={area} rot={rot} isOver={isOver}>
@@ -59,7 +61,7 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
           setIsOver(false);
         }}
       >
-        {taskList}
+        {taskList ? taskList : ''}
       </ul>
     </Container>
   );

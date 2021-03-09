@@ -1,6 +1,6 @@
 import types from '../assets/types/userTypes';
 
-const initialState = { currentUser: null, error: null };
+const initialState = { currentUser: null, error: null, isDataLoaded: false };
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -10,6 +10,8 @@ export const userReducer = (state = initialState, action) => {
       return { ...state, error: action.message };
     case types.CLEAR_ERROR:
       return { ...state, error: null };
+    case types.HIDE_LOADER:
+      return { ...state, isDataLoaded: true };
     default:
       return state;
   }

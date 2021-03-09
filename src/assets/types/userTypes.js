@@ -1,5 +1,6 @@
 const LOG_IN = 'LOG_IN';
 const LOG_ERROR = 'LOG_ERROR';
 const CLEAR_ERROR = 'CLEAR_ERROR';
+const HIDE_LOADER = 'HIDE_LOADER';
 
-export default { LOG_IN, LOG_ERROR, CLEAR_ERROR };
+export default { LOG_IN, LOG_ERROR, CLEAR_ERROR, HIDE_LOADER };

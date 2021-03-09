@@ -10,3 +10,7 @@ export const setLogError = (message) => {
 export const clearLogError = () => {
   return { type: types.CLEAR_ERROR };
 };
+
+export const hideLoader = () => {
+  return { type: types.HIDE_LOADER };
+};

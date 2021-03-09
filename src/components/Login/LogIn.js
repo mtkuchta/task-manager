@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -65,8 +66,23 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    logInForm: state.logIn,
+    logInForm: state.logInForm,
   };
+};
+
+LogIn.propTypes = {
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
+  logIn: PropTypes.func,
+  setLogError: PropTypes.func,
+  clearLogError: PropTypes.func,
+  changeInput: PropTypes.func,
+  logInForm: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+  }),
+  clearInput: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogIn);

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { auth } from '../../services/firebase';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -75,8 +76,23 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => {
   return {
     user: state.user,
-    signUpForm: state.signUp,
+    signUpForm: state.signUpForm,
   };
+};
+
+SignUp.propTypes = {
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
+  setLogError: PropTypes.func,
+  signUpForm: PropTypes.shape({
+    email: PropTypes.string,
+    password: PropTypes.string,
+    confirmedPassword: PropTypes.string,
+  }),
+  changeSignUpInput: PropTypes.func,
+  clearSignUpInput: PropTypes.func,
+  clearSignUpPasswords: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

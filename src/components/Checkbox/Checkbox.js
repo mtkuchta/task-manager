@@ -1,4 +1,5 @@
 import { StyledLabel } from './Checkbox.styles';
+import PropTypes from 'prop-types';
 
 const Checkbox = ({ handleCheckbox, red, value, id, name }) => {
   return (
@@ -7,6 +8,14 @@ const Checkbox = ({ handleCheckbox, red, value, id, name }) => {
       <span className="checkmark"></span>1
     </StyledLabel>
   );
+};
+
+Checkbox.propTypes = {
+  handleCheckbox: PropTypes.func,
+  red: PropTypes.bool,
+  value: PropTypes.bool,
+  id: PropTypes.number,
+  name: PropTypes.string,
 };
 
 export default Checkbox;

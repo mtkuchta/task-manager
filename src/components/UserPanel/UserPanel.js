@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { logout } from '../../services/firebase';
 import { Container } from './UserPanel.styles';
 
@@ -20,5 +21,11 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
   };
+};
+
+UserPanel.propTypes = {
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
 };
 export default connect(mapStateToProps, {})(UserPanel);

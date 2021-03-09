@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 
 import { GlobalStyle } from '../../assets/styles/globalStyle';
 import { theme } from '../../assets/styles/theme';
+import { Wrapper, Main, Aside } from './App.styles';
 
 import Header from '../../layouts/Header/Header';
 import LoginPage from '../../layouts/LoginPage/LoginPage';
@@ -14,10 +16,7 @@ import TaskBoard from '../TaskBoard/TaskBoard';
 import UserPanel from '../UserPanel/UserPanel';
 import AuthRoute from '../AuthRoute/AuthRoute';
 
-import { Wrapper, Main, Aside } from './App.styles';
-
 import { auth, getTasksfromDatabase } from '../../services/firebase';
-
 import { fetchTasks } from '../../actions/taskActions';
 import { logIn } from '../../actions/userActions';
 
@@ -69,5 +68,13 @@ const mapDispatchToProps = (dispatch) => ({
   logIn: (user) => dispatch(logIn(user)),
   fetchTasks: (tasks) => dispatch(fetchTasks(tasks)),
 });
+
+App.propTypes = {
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
+  logIn: PropTypes.func,
+  fetchTasks: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

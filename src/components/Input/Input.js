@@ -1,4 +1,5 @@
 import { Container } from './Input.styles';
+import PropTypes from 'prop-types';
 
 const Input = ({ type, value, inputHandler, placeholder, name }) => {
   return (
@@ -15,6 +16,14 @@ const Input = ({ type, value, inputHandler, placeholder, name }) => {
       />
     </Container>
   );
+};
+
+Input.propTypes = {
+  type: PropTypes.string,
+  value: PropTypes.string,
+  inputHandler: PropTypes.func,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
 };
 
 export default Input;

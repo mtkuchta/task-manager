@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dragLeave, dragOver, clearState } from '../../actions/dragAndDropActions';
 import { dropTask } from '../../actions/taskActions';
@@ -78,5 +79,31 @@ const mapDispatchToProps = (dispatch) => ({
   dropTask: (payload) => dispatch(dropTask(payload)),
   clearState: () => dispatch(clearState()),
 });
+
+Card.propTypes = {
+  area: PropTypes.string,
+  important: PropTypes.bool.isRequired,
+  urgent: PropTypes.bool.isRequired,
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string,
+      id: PropTypes.number,
+      isImportant: PropTypes.bool,
+      isUrgent: PropTypes.bool,
+      isDone: PropTypes.bool,
+    })
+  ),
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
+  dragAndDrop: PropTypes.shape({
+    container: PropTypes.object,
+    draggedTask: PropTypes.number,
+  }),
+  dragOver: PropTypes.func.isRequired,
+  dragLeave: PropTypes.func.isRequired,
+  dropTask: PropTypes.func.isRequired,
+  clearState: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card);

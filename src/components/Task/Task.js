@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import deleteIcon from '../../assets/icons/cancel.png';
 
@@ -56,5 +57,25 @@ const mapStateToProps = (state) => {
     dragAndDrop: state.dragAndDrop,
     user: state.user,
   };
+};
+
+Task.propTypes = {
+  id: PropTypes.number,
+  description: PropTypes.string,
+  deleteTask: PropTypes.func,
+  changeTaskStatus: PropTypes.func,
+  startDrag: PropTypes.func,
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string,
+      id: PropTypes.number,
+      isImportant: PropTypes.bool,
+      isUrgent: PropTypes.bool,
+      isDone: PropTypes.bool,
+    })
+  ),
+  user: PropTypes.shape({
+    currentUser: PropTypes.object,
+  }),
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Task);

@@ -11,7 +11,7 @@ export const reducers = combineReducers({
   tasks: taskReducer,
   dragAndDrop: dragAndDropReducer,
   user: userReducer,
-  logIn: logInReducer,
-  signUp: signUpReducer,
+  logInForm: logInReducer,
+  signUpForm: signUpReducer,
   addTask: addTaskReducer,
 });

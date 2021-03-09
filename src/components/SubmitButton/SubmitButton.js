@@ -1,4 +1,5 @@
 import { Container } from './SubmitButton.styles';
+import PropTypes from 'prop-types';
 
 const SubmitButton = ({ value }) => {
   return (
@@ -7,4 +8,9 @@ const SubmitButton = ({ value }) => {
     </Container>
   );
 };
+
+SubmitButton.propTypes = {
+  value: PropTypes.string,
+};
+
 export default SubmitButton;

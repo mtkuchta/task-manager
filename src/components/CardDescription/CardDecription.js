@@ -1,10 +1,19 @@
 import { Container } from './CardDescription.styles';
+import PropTypes from 'prop-types';
 
-const CardDescription = (props) => {
+const CardDescription = ({ area, red, rotated, text }) => {
   return (
-    <Container area={props.area} color={props.red ? 'red' : 'cadet'} rotated={props.rotated}>
-      <h1>{props.text}</h1>
+    <Container area={area} color={red ? 'red' : 'cadet'} rotated={rotated}>
+      <h1>{text}</h1>
     </Container>
   );
 };
+
+CardDescription.propTypes = {
+  area: PropTypes.string,
+  red: PropTypes.bool,
+  rotated: PropTypes.bool,
+  text: PropTypes.string,
+};
+
 export default CardDescription;

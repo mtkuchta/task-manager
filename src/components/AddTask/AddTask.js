@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { StyledForm } from './AddTask.styles';
 
@@ -12,7 +13,7 @@ import Checkbox from '../Checkbox/Checkbox';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import Input from '../Input/Input';
 
-const AddTask = ({ addTask, tasks, user: { currentUser }, addTaskForm, changeTaskInput, clearTaskInput }) => {
+const AddTask = ({ tasks, user: { currentUser }, addTask, addTaskForm, changeTaskInput, clearTaskInput }) => {
   const task = {
     description: addTaskForm.task,
     id: setTaskID(tasks),
@@ -65,4 +66,26 @@ const mapStateToProps = (state) => {
     addTaskForm: state.addTask,
   };
 };
+
+AddTask.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string,
+      id: PropTypes.number,
+      isImportant: PropTypes.bool,
+      isUrgent: PropTypes.bool,
+      isDone: PropTypes.bool,
+    })
+  ),
+  currentUser: PropTypes.object,
+  addTask: PropTypes.func.isRequired,
+  addTaskForm: PropTypes.shape({
+    task: PropTypes.string,
+    isImportant: PropTypes.bool,
+    isUrgent: PropTypes.bool,
+  }),
+  changeTaskInput: PropTypes.func.isRequired,
+  clearTaskInput: PropTypes.func.isRequired,
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(AddTask);

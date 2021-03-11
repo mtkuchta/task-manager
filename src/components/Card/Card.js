@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
+import { Spring } from 'react-spring/renderprops';
 
 import { dragLeave, dragOver, clearState } from '../../actions/dragAndDropActions';
 import { dropTask } from '../../actions/taskActions';
@@ -14,11 +15,11 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
   const [isOver, setIsOver] = useState(false);
   let taskList = [];
 
-  const showCard = useSpring({
-    from: { transform: 'scale(0)' },
-    to: { transform: 'scale(1)' },
-    config: { friction: 150, tension: 400, mass: 18 },
-  });
+  // const showCard = useSpring({
+  //   from: { transform: 'scale(0)' },
+  //   to: { transform: 'scale(1)' },
+  //   config: { friction: 150, tension: 400, mass: 18 },
+  // });
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -38,6 +39,7 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
       updateTaskInDatabase(user, tasks, transferedTask.id);
     }
   };
+
   if (tasks.length >= 1) {
     taskList = tasks.map((task) => {
       if (important === task.isImportant && urgent === task.isUrgent) {
@@ -47,31 +49,35 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
   }
 
   return (
-    <Container as={animated.div} style={showCard} area={area} rot={rot} isOver={isOver}>
-      <ul
-        className="card"
-        data-important={`${important}`}
-        data-urgent={`${urgent}`}
-        onDragEnd={(e) => {
-          handleDropTask(e);
-          clearState();
-        }}
-        onDrop={() => {
-          setIsOver(false);
-        }}
-        onDragOver={(e) => {
-          handleDragOver(e);
-          setIsOver(true);
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault();
-          dragLeave(e);
-          setIsOver(false);
-        }}
-      >
-        {taskList ? taskList : ''}
-      </ul>
-    </Container>
+    <Spring from={{ transform: 'scale(0)' }} to={{ transform: 'scale(1)' }} config={{ friction: 150, tension: 400, mass: 18 }}>
+      {(styles) => (
+        <Container style={styles} isOver={isOver} area={area} rot={rot}>
+          <ul
+            className="card"
+            data-important={`${important}`}
+            data-urgent={`${urgent}`}
+            onDragEnd={(e) => {
+              handleDropTask(e);
+              clearState();
+            }}
+            onDrop={() => {
+              setIsOver(false);
+            }}
+            onDragOver={(e) => {
+              handleDragOver(e);
+              setIsOver(true);
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              dragLeave(e);
+              setIsOver(false);
+            }}
+          >
+            {taskList ? taskList : ''}
+          </ul>
+        </Container>
+      )}
+    </Spring>
   );
 };
 

@@ -12,6 +12,8 @@ import SubmitButton from '../SubmitButton/SubmitButton';
 import Input from '../Input/Input';
 import Error from '../Error/Error';
 
+import { isPasswordValidated } from '../../assets/helpers/isPasswordValidated';
+
 import { setLogError, clearLogError } from '../../actions/userActions';
 import { changeSignUpInput, clearSignUpInput, clearSignUpPasswords } from '../../actions/signUpActions';
 
@@ -31,10 +33,15 @@ const SignUp = ({ user, setLogError, signUpForm, changeSignUpInput, clearSignUpI
   const handleCreateUser = (e) => {
     e.preventDefault();
     setLogError(null);
+    if (!isPasswordValidated(signUpForm.password)) {
+      setLogError('Password must consist of at least 6 characters, contain a capital letter and a number ');
+      return;
+    }
+
     if (signUpForm.password === signUpForm.confirmedPassword) {
       auth()
         .createUserWithEmailAndPassword(signUpForm.email, signUpForm.password)
-        .then((data) => {
+        .then(() => {
           clearSignUpInput();
           history.push('/');
         })

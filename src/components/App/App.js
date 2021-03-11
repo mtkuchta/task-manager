@@ -24,7 +24,6 @@ import { logIn, setIsDataLoaded } from '../../actions/userActions';
 function App({ user, logIn, fetchTasks, setIsDataLoaded }) {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((data) => logIn(data));
-
     return () => unsubscribe();
   }, []);
 

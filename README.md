@@ -1,6 +1,6 @@
 # TASK MANAGER
 
-![task-manager-photo](./src/assets/images/taskManager_view.png)
+![task-manager-photo](./src/assets/images/taskManager_view.jpg)
 
 ## Introduction
 

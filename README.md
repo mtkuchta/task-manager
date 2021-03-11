@@ -7,7 +7,7 @@
 Simple application for task management based on the Eisenhower Matrix. You can define tasks and set attributes "important" and "urgent" for them.
 Task board is divided into four sections depending on the attributes. You can drag task between sections to change task attributes.
 To start using the application it is necessary to create an account. The Firebase is used for authentication and data storage.
-The application is responsive only to 1200px.
+The application is responsive only to 1200px. You can find Task Manager demo [here](https://mtkuchta.github.io/task-manager)
 
 ## Technologies:
 

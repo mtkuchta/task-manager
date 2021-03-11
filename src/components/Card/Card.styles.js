@@ -19,4 +19,11 @@ export const Container = styled.div`
     padding: 4%;
     transition: 0.6s;
   }
+
+  .card-container-enter {
+    opacity: 0.01;
+  }
+  .card-container-enter-active {
+    opacity: 1;
+  }
 `;

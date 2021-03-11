@@ -11,6 +11,10 @@ export const clearLogError = () => {
   return { type: types.CLEAR_ERROR };
 };
 
-export const hideLoader = () => {
+export const setIsDataLoaded = () => {
   return { type: types.HIDE_LOADER };
+};
+
+export const clearUserData = () => {
+  return { type: types.CLEAR_USER_DATA };
 };

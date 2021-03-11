@@ -12,6 +12,8 @@ export const userReducer = (state = initialState, action) => {
       return { ...state, error: null };
     case types.HIDE_LOADER:
       return { ...state, isDataLoaded: true };
+    case types.CLEAR_USER_DATA:
+      return { ...state, isDataLoaded: false };
     default:
       return state;
   }

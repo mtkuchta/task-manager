@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
+
 import { dragLeave, dragOver, clearState } from '../../actions/dragAndDropActions';
 import { dropTask } from '../../actions/taskActions';
 import { updateTaskInDatabase } from '../../services/firebase';
@@ -11,6 +13,12 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
   const rot = Math.random().toFixed(2);
   const [isOver, setIsOver] = useState(false);
   let taskList = [];
+
+  const showCard = useSpring({
+    from: { transform: 'scale(0)' },
+    to: { transform: 'scale(1)' },
+    config: { friction: 150, tension: 400, mass: 18 },
+  });
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -39,7 +47,7 @@ const Card = ({ area, important, urgent, tasks, user, dragAndDrop, dragOver, dra
   }
 
   return (
-    <Container area={area} rot={rot} isOver={isOver}>
+    <Container as={animated.div} style={showCard} area={area} rot={rot} isOver={isOver}>
       <ul
         className="card"
         data-important={`${important}`}

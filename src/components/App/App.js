@@ -19,9 +19,9 @@ import Loader from '../Loader/Loader';
 
 import { auth, getTasksfromDatabase } from '../../services/firebase';
 import { fetchTasks } from '../../actions/taskActions';
-import { logIn, hideLoader } from '../../actions/userActions';
+import { logIn, setIsDataLoaded } from '../../actions/userActions';
 
-function App({ user, logIn, fetchTasks, hideLoader }) {
+function App({ user, logIn, fetchTasks, setIsDataLoaded }) {
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((data) => logIn(data));
 
@@ -30,15 +30,10 @@ function App({ user, logIn, fetchTasks, hideLoader }) {
 
   useEffect(async () => {
     fetchTasks(await getTasksfromDatabase(user));
-    hideLoader();
+    if (user.currentUser) {
+      setIsDataLoaded();
+    }
   }, [user.currentUser]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetchTasks([{ description: 'dsfsf', isDone: false, isUrgent: true, isImportant: true, id: 0 }]);
-  //     hideLoader();
-  //   }, 3000);
-  // }, [user.currentUser]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -47,8 +42,8 @@ function App({ user, logIn, fetchTasks, hideLoader }) {
         <Wrapper>
           <Aside>
             <Header />
-            {user.isDataLoaded ? <UserPanel /> : null}
-            {user.isDataLoaded ? <NewTaskPanel /> : null}
+            {user.isDataLoaded && user.currentUser ? <UserPanel /> : null}
+            {user.isDataLoaded && user.currentUser ? <NewTaskPanel /> : null}
           </Aside>
           <Switch>
             <Route path="/login">{!user.currentUser ? <LoginPage /> : <Redirect to="/" />}</Route>
@@ -74,7 +69,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   logIn: (user) => dispatch(logIn(user)),
   fetchTasks: (tasks) => dispatch(fetchTasks(tasks)),
-  hideLoader: () => dispatch(hideLoader()),
+  setIsDataLoaded: () => dispatch(setIsDataLoaded()),
 });
 
 App.propTypes = {
@@ -84,7 +79,7 @@ App.propTypes = {
   }),
   logIn: PropTypes.func,
   fetchTasks: PropTypes.func.isRequired,
-  hideLoader: PropTypes.func.isRequired,
+  setIsDataLoaded: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

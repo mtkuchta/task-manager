@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { auth } from '../../services/firebase';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { useSpring, animated } from 'react-spring';
 
 import { Container, Form } from './SignUp.styles';
 
@@ -16,6 +17,12 @@ import { changeSignUpInput, clearSignUpInput, clearSignUpPasswords } from '../..
 
 const SignUp = ({ user, setLogError, signUpForm, changeSignUpInput, clearSignUpInput, clearSignUpPasswords }) => {
   const history = useHistory();
+
+  const show = useSpring({
+    from: { transform: 'scale(0)' },
+    to: { transform: 'scale(1)' },
+    config: { friction: 150, tension: 400, mass: 18 },
+  });
 
   const handleInputChange = (e) => {
     changeSignUpInput({ name: e.target.name, value: e.target.value });
@@ -39,7 +46,7 @@ const SignUp = ({ user, setLogError, signUpForm, changeSignUpInput, clearSignUpI
   };
 
   return (
-    <Container>
+    <Container as={animated.div} style={show}>
       <AppLogo />
       <div className="description">Create new account:</div>
       {user.error ? <Error message={user.error || ''} /> : null}

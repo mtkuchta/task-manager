@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { useSpring, animated } from 'react-spring';
 
 import { auth } from '../../services/firebase';
 import { logIn, setLogError, clearLogError } from '../../actions/userActions';
@@ -18,10 +19,17 @@ import { changeInput, clearInput } from '../../actions/logInActions';
 const LogIn = ({ user, logIn, setLogError, clearLogError, changeInput, logInForm, clearInput }) => {
   const history = useHistory();
 
-  const handleLogin = (e, userName, password) => {
+  const show = useSpring({
+    from: { transform: 'scale(0)' },
+    to: { transform: 'scale(1)' },
+    config: { friction: 150, tension: 400, mass: 18 },
+  });
+
+  const handleLogin = async (e, userName, password) => {
     e.preventDefault();
     clearLogError();
-    auth()
+
+    await auth()
       .signInWithEmailAndPassword(userName, password)
       .then((user) => logIn(user))
       .catch((error) => setLogError(error.message));
@@ -34,7 +42,7 @@ const LogIn = ({ user, logIn, setLogError, clearLogError, changeInput, logInForm
   };
 
   return (
-    <Container>
+    <Container as={animated.div} style={show}>
       <AppLogo />
       {user.error ? <Error message={user.error || ''} /> : null}
       <Form onSubmit={(e) => handleLogin(e, logInForm.email, logInForm.password)}>

@@ -9,6 +9,7 @@ export const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.YELLOW};
   padding: 15px 10px;
   filter: drop-shadow(-6px 6px 4px rgba(0, 0, 0, 0.55));
+  overflow: hidden;
 
   h2 {
     font-size: 2.5em;

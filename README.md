@@ -11,6 +11,7 @@ The application is responsive only to 1200px. You can find Task Manager demo [he
 
 ## Technologies:
 
+- Node 12.18.4
 - React 17.0.1,
 - Redux 4.0.5,
 - React Spring 8.0.27,
